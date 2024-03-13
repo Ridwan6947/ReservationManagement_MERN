@@ -1,5 +1,6 @@
 import errorHandler from "../error/error.js";
-import {Register} from '../model/register.js'
+import {Register} from '../model/register.js';
+
 
 export const sendRegister = async (req, res, next) => {
     const { fullname, email, password, username } = req.body;
@@ -10,9 +11,14 @@ export const sendRegister = async (req, res, next) => {
         }
 
         // Check if the email is already registered
-        const existingUser = await Register.findOne({ email });
-        if (existingUser) {
+        const existingUserByEmail = await Register.findOne({ email });
+        if (existingUserByEmail) {
             throw new errorHandler("Email is already registered", 400);
+        }
+        //Check if username already present
+        const existingUserByUsername = await Register.findOne({username});
+        if(existingUserByUsername){
+            throw new errorHandler("Username already registered , try another" , 400);
         }
 
         // Create a new user document
@@ -24,7 +30,7 @@ export const sendRegister = async (req, res, next) => {
         });
 
         // Optionally, return the created user object in the response
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "User registered successfully",
             user: newUser
@@ -46,7 +52,7 @@ export const sendRegister = async (req, res, next) => {
 export const sendLogin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-
+ 
         const user = await Register.findOne({ email });
 
         if (user) {

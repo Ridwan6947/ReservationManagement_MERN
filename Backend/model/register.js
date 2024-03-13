@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import { jwt } from "jsonwebtoken";
+import bcrypt from 'bcrypt';
+
 
 const registerSchema = new mongoose.Schema({
     fullname:{
@@ -23,5 +26,14 @@ const registerSchema = new mongoose.Schema({
         unique:true,
     }
 });
+
+registerSchema.pre("save" , async function(next){
+    if(!this.isModified("password")) return next(); // check if the password was modified inorder to prevent multiple encryption
+    this.password = bcrypt.hash(this.password , 3)
+})
+
+registerSchema.methods.isPasswordModified = async function(password){
+    return await bcrypt.compare(password , this.password);            
+}
 
 export const Register = mongoose.model("Register" , registerSchema);

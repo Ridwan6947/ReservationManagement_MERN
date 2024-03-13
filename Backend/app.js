@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 dbConnection();
 app.use(errorMiddleWare);
-app.use('/api/v1/reservatrion' , reservationRouter);
+app.use('/api/v1' , reservationRouter);
 app.use('/api/v1', loginRouter);
 app.use('/api/v1', registerRouter);
 
