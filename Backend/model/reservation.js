@@ -1,12 +1,12 @@
-import mongoose from 'mongoose'
-import validator from 'validator'
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 const reservationSchema = new mongoose.Schema({
-    fullName:{
+    fullname:{
         type: String,
         required: true,
         minLength: [3,"Must contains atleast 3 letters"],
-        maxLengthL: [20, "Must contain less than 20 letters"],
+        maxLength: [20, "Must contain less than 20 letters"],
     },
 
     email:{
@@ -19,7 +19,7 @@ const reservationSchema = new mongoose.Schema({
         type: String,
         required: true,
         minLength: [10,"Must contains 10 digits"],
-        maxLengthL: [10, "Must contain 10 digits"],
+        maxLength: [10, "Must contain 10 digits"],
     },
 
     time:{

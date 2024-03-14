@@ -2,12 +2,12 @@ import errorHandler from "../error/error.js";
 import { Reservation } from "../model/reservation.js";
 
 export const sendReservation = async(req , res , next) => {
-    const {fullName , email , phone , time , date} = req.body;
-    if(!fullName || !email || !phone || !time || !date){
+    const {fullname , email , phone , time , date} = req.body;
+    if(!fullname || !email || !phone || !time || !date){
         return next (new errorHandler("Please fill every detail" , 400))
     }
     try {
-        await Reservation.create(fullName , email , phone , time , date);
+        await Reservation.create({fullname , email , phone , time , date});
         res.status(200).json({
             success: true,
             message: "Reservation made successfully",
@@ -19,5 +19,6 @@ export const sendReservation = async(req , res , next) => {
             );
             return next(new errorHandler(validationErrors.join(', '), 400));
         } 
+        return next(error);
     }
 };

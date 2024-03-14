@@ -4,7 +4,7 @@ import { verifyJWT } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post('/login' , loginUser);
+router.route('/login').post(loginUser);
 
 //secure Routes
 router.route('/logout').post(verifyJWT ,logoutUser)

@@ -31,7 +31,7 @@ const registerSchema = new mongoose.Schema({
 });
 
 registerSchema.pre("save" , async function(next){
-    if(!this.isModified("password")) return next(); // check if the password was modified inorder to prevent multiple encryption
+    if(!this.isModified("password")) return next(); // check if the password was modified inorder to prevent multiple use of bcrypt encryption
     this.password = bcrypt.hash(this.password , 3)
 })
 

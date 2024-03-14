@@ -1,8 +1,8 @@
 import errorHandler from "../error/error.js";
 import jwt from "jsonwebtoken";
-import { Register } from "../model/register";
+import { Register } from "../model/register.js";
 
-export const verifyJWT = async ( req , res , next)=>{
+export const verifyJWT = async ( req , _ , next)=>{
     try {
         //retrive token from cookies or from header 
         const token = req.cookie?.accessToken || req.header("Authorization")?.replace("Bearer " , "")  // taking accessToken from either cookie or from header -> authorization -> bearer

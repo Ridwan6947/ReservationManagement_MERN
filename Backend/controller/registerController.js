@@ -10,7 +10,7 @@ const generateAccessTokenRefreshToken = async (userId) => {
         const accessToken = user.generateAccessToken()  // calling func from register model and storing
         const refreshToken = user.generateRefreshToke()  // calling func from register model and storing
 
-        user.refreshToken - refreshToken // before this line only server had refresh token but after this we are storing refresh token in the database
+        user.refreshToken = refreshToken // before this line only server had refresh token but after this we are storing refresh token in the database
         await user.save({ validateBeforeSave: false }) //mujhe pta h mai kya kr rha hu gyaan mt de
 
         return { accessToken, refreshToken }
@@ -114,7 +114,7 @@ export const loginUser = async (req, res, next) => {
     const {accessToken , refreshToken} = await generateAccessTokenRefreshToken(user._id)
 
     const options = {
-        httpOnle: true,     // cookies can only be modified when we use httponly and secure 
+        httpOnly: true,     // cookies can only be modified when we use httponly and secure 
         secure: true,
     }
 
@@ -147,7 +147,7 @@ export const logoutUser = async (req , res) =>{
         }
     )
     const options = {
-        httpOnle: true,     // cookies can only be modified when we use httponly and secure 
+        httpOnly: true,     // cookies can only be modified when we use httponly and secure 
         secure: true,
     }
 
