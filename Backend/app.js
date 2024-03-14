@@ -6,6 +6,7 @@ import { errorMiddleWare } from "./error/error.js";
 import reservationRouter from "./route/reservationRoute.js";
 import loginRouter from './route/loginRoute.js';
 import registerRouter from './route/registerRoute.js'
+import cookieParser from "cookie-parser";
 
 
 
@@ -15,6 +16,7 @@ dotenv.config({path: "./config/config.env"})
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser())
 dbConnection();
 app.use(errorMiddleWare);
 app.use('/api/v1' , reservationRouter);

@@ -1,6 +1,7 @@
 import errorHandler from "../error/error.js";
 import { Register } from '../model/register.js';
 import bcrypt from "bcrypt";
+import ApiResponse from "../response/ApiResponse.js";
 
 
 const generateAccessTokenRefreshToken = async (userId) => {
@@ -110,5 +111,49 @@ export const loginUser = async (req, res, next) => {
             message: "Something went wrong"
         });
     }
-    await generateAccessTokenRefreshToken(user._id)
-};
+    const {accessToken , refreshToken} = await generateAccessTokenRefreshToken(user._id)
+
+    const options = {
+        httpOnle: true,     // cookies can only be modified when we use httponly and secure 
+        secure: true,
+    }
+
+    return res
+    .status(200)
+    .cookie("accessToken",accessToken,options)
+    .cookie("refreshToken",refreshToken,options)
+    .json(
+        new ApiResponse(
+            200 , 
+            {
+                user:accessToken,refreshToken
+            } , 
+            "Login Successful"
+        )
+    )
+}; 
+
+export const logoutUser = async (req , res) =>{
+    //remove refresh token from database
+    await Register.findByIdAndUpdate(          //find and update user REfreshToken and delete it
+        req.user._id,
+        {
+            $set:{    //set is used to update in mongoDB
+                refreshToken:undefined,
+            },
+        },
+        {
+            new:true
+        }
+    )
+    const options = {
+        httpOnle: true,     // cookies can only be modified when we use httponly and secure 
+        secure: true,
+    }
+
+    return res.status(200).clearCookie("accessToken" , options).clearCookie("refreshToken" . options).json(
+        new ApiResponse(
+            200 ,"User logged out"
+        )
+    )
+}
