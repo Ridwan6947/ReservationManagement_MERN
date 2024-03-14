@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-import { jwt } from "jsonwebtoken";
+import  jwt  from "jsonwebtoken";
 import bcrypt from 'bcrypt';
 
 
@@ -24,7 +24,10 @@ const registerSchema = new mongoose.Schema({
         type:String,
         required:true,
         unique:true,
-    }
+    },
+    refreshToken:{
+        type:String,
+    },
 });
 
 registerSchema.pre("save" , async function(next){
@@ -32,8 +35,35 @@ registerSchema.pre("save" , async function(next){
     this.password = bcrypt.hash(this.password , 3)
 })
 
-registerSchema.methods.isPasswordModified = async function(password){
+registerSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password , this.password);            
 }
 
+registerSchema.methods.generateAccessToken = function(){
+     // Generating a JWT (JSON Web Token) with the user's _id, email, and username as payload
+    return jwt.sign(
+        {
+            _id: this._id,
+            email: this.email,
+            username: this.username
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRE
+        }
+    )
+}
+registerSchema.methods.refreshAccessToken = function(){
+     // Generating a JWT (JSON Web Token) with the user's _id as payload
+    return jwt.sign(
+        {
+            _id: this._id
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn: process.env.REFRESH_TOKEN_EXPIRE
+        }
+    )
+    
+}
 export const Register = mongoose.model("Register" , registerSchema);
