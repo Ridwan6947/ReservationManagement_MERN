@@ -3,22 +3,24 @@ import { Register } from '../model/register.js';
 import bcrypt from "bcrypt";
 import ApiResponse from "../response/ApiResponse.js";
 
-
 const generateAccessTokenRefreshToken = async (userId) => {
     try {
-        const user = await Register.findById(userId)  // find userId of user from database to generate access and refresh token
-        const accessToken = user.generateAccessToken()  // calling func from register model and storing
-        const refreshToken = user.generateRefreshToke()  // calling func from register model and storing
+        const user = await Register.findById(userId); // Find user by email from the database
+        if (!user) {
+            throw new errorHandler("User not found", 404);
+        }
 
-        user.refreshToken = refreshToken // before this line only server had refresh token but after this we are storing refresh token in the database
-        await user.save({ validateBeforeSave: false }) //mujhe pta h mai kya kr rha hu gyaan mt de
+        const accessToken = user.generateAccessToken(); // Generate access token
+        const refreshToken = user.generateRefreshToken(); // Generate refresh token
 
-        return { accessToken, refreshToken }
+        // Assuming refreshToken is saved in the database associated with the user
 
+        return { accessToken, refreshToken };
     } catch (error) {
-        throw new errorHandler("Internal error while generating Access and refresh token")
+        console.error("Error generating access and refresh tokens:", error);
+        throw new errorHandler("Internal error while generating Access and refresh token",500);
     }
-}
+};
 
 
 export const registerUser = async (req, res, next) => {
@@ -66,52 +68,28 @@ export const registerUser = async (req, res, next) => {
     }
 };
 
-export const loginUser = async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
 
-        const user = await Register.findOne({ email });  // while accessing database or process that require high computation power we use await
-        //await allows the program to wait for a promise to resolve or reject before proceeding to the next line of code
-
-        if (user) {
-            // if (user.password === password) {
-            //     res.status(200).json({
-            //         success: true,
-            //         message: "Login successful"
-            //     });
-            // } else {
-            //     res.status(401).json({
-            //         success: false,
-            //         message: "Wrong password"      //method 1 - used when bcrypt is not used
-            //     });
-            // }
-
-            const isPasswordValid = await user.isPasswordCorrect(password) // method 2 - used with bcrypt
-
-            if (isPasswordValid) {
-                res.status(200).json({
-                    success: true,
-                    message: "Login Successful",
-                })
-            } else {
-                res.status(400).json({
-                    success: false,
-                    message: "invalid password , try again",
-                })
-            }
-        } else {
-            res.status(404).json({
-                success: false,
-                message: "Email not registered"
-            });
-        }
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: "Something went wrong"
-        });
+    if(!email || !password){
+        throw new errorHandler("Please fill all the details", 400);
     }
+
+    const user = await Register.findOne({email});
+
+    if(!user){
+        throw new errorHandler("User not found", 404);
+    }
+
+    const isPasswordvalid = await user.isPasswordCorrect(password);
+
+    if(!isPasswordvalid){
+        throw new errorHandler("Incorrect password", 400);
+    }
+
     const {accessToken , refreshToken} = await generateAccessTokenRefreshToken(user._id)
+
+    const loggedInUser = await Register.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,     // cookies can only be modified when we use httponly and secure 
@@ -126,7 +104,7 @@ export const loginUser = async (req, res, next) => {
         new ApiResponse(
             200 , 
             {
-                user:accessToken,refreshToken
+                user:loggedInUser,accessToken,refreshToken
             } , 
             "Login Successful"
         )

@@ -14,7 +14,10 @@ const app = express();
 dotenv.config({path: "./config/config.env"})
 
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Update this to match the origin of your frontend application
+    credentials: true // Allow credentials to be included in the request
+  }));
 app.use(express.json());
 app.use(cookieParser())
 dbConnection();

@@ -53,7 +53,7 @@ registerSchema.methods.generateAccessToken = function(){
         }
     )
 }
-registerSchema.methods.refreshAccessToken = function(){
+registerSchema.methods.generateRefreshToken = function(){
      // Generating a JWT (JSON Web Token) with the user's _id as payload
     return jwt.sign(
         {
