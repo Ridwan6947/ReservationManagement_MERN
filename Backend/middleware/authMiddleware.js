@@ -5,7 +5,7 @@ import { Register } from "../model/register.js";
 export const verifyJWT = async ( req , _ , next)=>{
     try {
         //retrive token from cookies or from header 
-        const token = req.cookie?.accessToken || req.header("Authorization")?.replace("Bearer " , "")  // taking accessToken from either cookie or from header -> authorization -> bearer
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer " , "")  // taking accessToken from either cookie or from header -> authorization -> bearer
         if(!token){
             throw new errorHandler("token not found" , 401)
         }
