@@ -12,6 +12,7 @@ const generateAccessTokenRefreshToken = async (userId) => {
 
         const accessToken = user.generateAccessToken(); // Generate access token
         const refreshToken = user.generateRefreshToken(); // Generate refresh token
+        user.refreshToken = refreshToken; // Save the refresh token in the database
 
         // Assuming refreshToken is saved in the database associated with the user
 
@@ -89,7 +90,7 @@ export const loginUser = async (req, res) => {
 
     const {accessToken , refreshToken} = await generateAccessTokenRefreshToken(user._id)
 
-    const loggedInUser = await Register.findById(user._id).select("-password -refreshToken")
+    const loggedInUser = await Register.findById(user._id).select("-password")
 
     const options = {
         httpOnly: true,     // cookies can only be modified when we use httponly and secure 
@@ -116,8 +117,8 @@ export const logoutUser = async (req , res) =>{
     await Register.findByIdAndUpdate(          //find and update user REfreshToken and delete it
         req.user._id,
         {
-            $set:{    //set is used to update in mongoDB
-                refreshToken:undefined,
+            $unset:{    //set is used to update in mongoDB
+                refreshToken:1,
             },
         },
         {
@@ -131,7 +132,7 @@ export const logoutUser = async (req , res) =>{
 
     return res.status(200).clearCookie("accessToken" , options).clearCookie("refreshToken" . options).json(
         new ApiResponse(
-            200 ,"User logged out"
+            200 ,{},"User logged out"
         )
     )
 }

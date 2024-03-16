@@ -19,27 +19,21 @@ function Login() {
                 toast.success(result.data.message);
                 navigate("/home");
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                toast.error(err);
+            })
     }
   return (
-    <div className='parent'>
-        <div className="child">
-        <form action="" className='form' onSubmit={handleSubmit}>
-            <h1>Already a user?</h1>
-            <div className="input-group">
-                <label htmlFor="email"><strong className='labelText'>Email</strong></label>
-                <input type="email" name="email" id="Email" placeholder='Enter your email' onChange={(e) => setEmail(e.target.value)}/>
-            </div>
-            <div className="input-group">
-                <label htmlFor="password"><strong className='labelText'>Password</strong></label>
-                <input type="password" name="password" id="Password" placeholder='Enter your password' onChange={(e) => setPassword(e.target.value)} />
-            </div>
-            <div className="button-container">
-                <button type="submit" className='btn'>Login</button>
-                <Link to={"/register"} className='btn1'>Create an account</Link>
-            </div>
+    <div className="containeR">
+        <form action="onSubmit"className='loginUI'>
+            <h1>Sign In</h1>
+            <span>or use your email password</span>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <a href="#">Forget Your Password?</a>
+            <button type='submit' onClick={handleSubmit}>Sign In</button>
         </form>
-        </div>
     </div>
   )
 }

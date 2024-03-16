@@ -19,7 +19,7 @@ const NavBar = () => {
                     );
                 })}
             </div>
-            <button className="menuBtn">Our Menu</button>
+            <button className="menuBtn">Logout</button>
         </div>
         <div className="hamburger" onClick={() => setShow(!show)}>
             <GiHamburgerMenu/>
