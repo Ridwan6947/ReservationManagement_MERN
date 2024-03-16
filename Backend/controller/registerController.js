@@ -2,6 +2,7 @@ import errorHandler from "../error/error.js";
 import { Register } from '../model/register.js';
 import bcrypt from "bcrypt";
 import ApiResponse from "../response/ApiResponse.js";
+import jwt from "jsonwebtoken";
 
 const generateAccessTokenRefreshToken = async (userId) => {
     try {
@@ -135,4 +136,45 @@ export const logoutUser = async (req , res) =>{
             200 ,{},"User logged out"
         )
     )
+}
+
+export const refreshAccessToken  = async (req , res) =>{
+    const incominmgRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+
+    if(!incominmgRefreshToken){
+        new errorHandler("Refresh token not found" , 401)
+    }
+
+    const decodedRefreshToken = jwt.verify(incominmgRefreshToken , process.env.REFRESH_TOKEN_SECRET)
+
+    const user = await Register.findById(decodedRefreshToken?._id);
+
+    if(!user){
+        throw new errorHandler("Invalid Refresh token" , 404)
+    }
+
+    if(incominmgRefreshToken !== Register?.refreshToken){
+        new errorHandler("Invalid Refresh token or exipred" , 401)
+    }
+
+    const options = {
+        httpOnly: true,     // cookies can only be modified when we use httponly and secure 
+        secure: true,
+    }
+
+    const {accessToken , newRefreshToken} = await generateAccessTokenRefreshToken(user._id)
+
+    return res.status(200).cookie("accessToken" , accessToken , options).cookie("refreshToken" , newRefreshToken , options).json(
+        new ApiResponse(
+            200 , 
+            {
+                accessToken,
+                refreshToken : newRefreshToken
+            } , 
+            "Access token refreshed"
+        )
+    )
+
+
+
 }
