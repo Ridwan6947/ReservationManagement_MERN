@@ -1,9 +1,10 @@
 import React from 'react'
 import { HiOutlineArrowNarrowRight } from 'react-icons/hi'
 import axios from 'axios'
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+
 
 const Reservation = () => {
     const [fullname , setFullname] = useState("");
@@ -12,6 +13,8 @@ const Reservation = () => {
     const [time , setTime] = useState("");
     const [date , setDate] = useState("");
     const navigate = useNavigate();
+
+    
 
     const handleReservation = async(e) =>{
         e.preventDefault();

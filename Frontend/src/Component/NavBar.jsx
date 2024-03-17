@@ -2,8 +2,26 @@ import React, { useState } from 'react'
 import {Link} from "react-scroll";
 import {GiHamburgerMenu} from "react-icons/gi"
 import {data} from '../Pages/restApi.json';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () =>{
+        axios.post("http://localhost:4000/api/v1/logout")
+        .then(result =>{
+            console.log(result)
+            toast.success("Logout successfull");
+            navigate("/")   
+        })
+        .catch(err =>{
+            console.log(err)
+            toast.error(err.response.data.message);
+        })
+    }
 
     const [show , setShow] = useState(false);
   return (
@@ -19,7 +37,7 @@ const NavBar = () => {
                     );
                 })}
             </div>
-            <button className="menuBtn">Logout</button>
+            <button className="menuBtn" onClick={handleLogout}>Logout</button>
         </div>
         <div className="hamburger" onClick={() => setShow(!show)}>
             <GiHamburgerMenu/>

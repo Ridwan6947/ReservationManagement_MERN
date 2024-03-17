@@ -3,6 +3,7 @@ import {Link} from "react-router-dom"
 import axios from "axios";
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Register from './Register.jsx';
 
 function Login() {
 
@@ -32,6 +33,7 @@ function Login() {
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}/>
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <a href="#">Forget Your Password?</a>
+            <a href="/register">Sign Up</a>
             <button type='submit' onClick={handleSubmit}>Sign In</button>
         </form>
     </div>
