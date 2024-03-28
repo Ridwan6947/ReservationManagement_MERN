@@ -57,26 +57,39 @@ ReservationManagement_MERN/
 
 ## Installation
 
-### Clone the Repository
 
 1. Clone the repository:
 
    ```bash
    git clone https://github.com/Ridwan6947/ReservationManagement_MERN.git
-Backend
-Navigate to the backend folder: cd ReservationManagement_MERN/backend/
-Install dependencies: npm install
+   ```
+2. Backend
+Navigate to the backend folder: 
+  ```bash
+  cd ReservationManagement_MERN/backend/
+  ```
+
+Install dependencies:
+  ```bash
+  npm install
+  ```
 
 Frontend
-Navigate to the frontend folder: cd ../frontend/
-Install dependencies: npm install
+Navigate to the frontend folder: 
+```bash
+cd ../frontend/
+```
+Install dependencies: 
+```bash
+npm install
+```
 
 Scripts
 Backend
-        npm start: Start the backend server.
-        npm run dev: Start the backend server using Nodemon for automatic server restarts during development.
+1- npm start: Start the backend server.\
+2- npm run dev: Start the backend server using Nodemon for automatic server restarts during development.
 Frontend
-        npm run dev: Start the frontend development server.
-        npm run build: Build the frontend application for production.
-        npm run lint: Run ESLint for linting the frontend code.
-        npm run preview: Preview the built frontend application locally.
+1- npm run dev: Start the frontend development server.
+2- npm run build: Build the frontend application for production.
+3- npm run lint: Run ESLint for linting the frontend code.
+4- npm run preview: Preview the built frontend application locally.
