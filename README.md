@@ -84,12 +84,16 @@ Install dependencies:
 npm install
 ```
 
-Scripts
-Backend
-1- npm start: Start the backend server.\
-2- npm run dev: Start the backend server using Nodemon for automatic server restarts during development.
-Frontend
-1- npm run dev: Start the frontend development server.
-2- npm run build: Build the frontend application for production.
-3- npm run lint: Run ESLint for linting the frontend code.
-4- npm run preview: Preview the built frontend application locally.
+### Scripts
+
+#### Backend
+
+1. `npm start`: Start the backend server.
+2. `npm run dev`: Start the backend server using Nodemon for automatic server restarts during development.
+
+#### Frontend
+
+1. `npm run dev`: Start the frontend development server.
+2. `npm run build`: Build the frontend application for production.
+3. `npm run lint`: Run ESLint for linting the frontend code.
+4. `npm run preview`: Preview the built frontend application locally.
