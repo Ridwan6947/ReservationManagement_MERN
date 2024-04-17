@@ -1,6 +1,5 @@
 import errorHandler from "../error/error.js";
 import { Register } from '../model/register.js';
-import bcrypt from "bcrypt";
 import ApiResponse from "../response/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
@@ -41,12 +40,11 @@ export const registerUser = async (req, res, next) => {
             throw new errorHandler("user already exist", 404);
         }
 
-        const hashedPassword = await bcrypt.hash(password, 3);
         // Create a new user document
         const newUser = await Register.create({
             fullname,
             email,
-            password: hashedPassword,
+            password,
             username
         });
 
@@ -83,9 +81,7 @@ export const loginUser = async (req, res) => {
         throw new errorHandler("User not found", 404);
     }
 
-    const isPasswordvalid = await user.isPasswordCorrect(password);
-
-    if(!isPasswordvalid){
+    if (user.password !== password) {
         throw new errorHandler("Incorrect password", 400);
     }
 

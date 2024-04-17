@@ -30,15 +30,6 @@ const registerSchema = new mongoose.Schema({
     },
 });
 
-registerSchema.pre("save" , async function(next){
-    if(!this.isModified("password")) return next(); // check if the password was modified inorder to prevent multiple use of bcrypt encryption
-    this.password = bcrypt.hash(this.password , 3)
-})
-
-registerSchema.methods.isPasswordCorrect = async function(password){
-    return await bcrypt.compare(password , this.password);            
-}
-
 registerSchema.methods.generateAccessToken = function(){
      // Generating a JWT (JSON Web Token) with the user's _id, email, and username as payload
     return jwt.sign(
