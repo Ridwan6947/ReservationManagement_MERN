@@ -15,7 +15,7 @@ dotenv.config({path: "./config/config.env"})
 
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Update this to match the origin of your frontend application
+    origin: 'https://master--curious-nougat-339307.netlify.app/', // Update this to match the origin of your frontend application
     credentials: true // Allow credentials to be included in the request
   }));
 app.use(express.json());
