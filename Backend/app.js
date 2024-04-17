@@ -12,7 +12,7 @@ import cookieParser from "cookie-parser";
 
 
 const app = express();
-dotenv.config({path: "./config/config.env"})
+dotenv.config({path: "config.env"});
 const __dirname = path.resolve();
 
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use('/api/v1' , reservationRouter);
 app.use('/api/v1', loginRouter);
 app.use('/api/v1', registerRouter);
 
-aoo.use(express.static(path.join(__dirname, "/Frontend/dist")));
+app.use(express.static(path.join(__dirname, "/Frontend/dist")));
 
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "Frontend", "dist", "index.html"));
