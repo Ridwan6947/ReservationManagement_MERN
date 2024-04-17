@@ -8,7 +8,7 @@ import reservationRouter from "./route/reservationRoute.js";
 import loginRouter from './route/loginRoute.js';
 import registerRouter from './route/registerRoute.js'
 import cookieParser from "cookie-parser";
-
+const PORT = process.env.PORT || 5000;
 
 
 const app = express();
@@ -27,6 +27,10 @@ app.use(express.static(path.join(__dirname, "/Frontend/dist")));
 
 app.get("*", (req, res) => {
 	res.sendFile(path.join(__dirname, "Frontend", "dist", "index.html"));
+});
+
+app.listen(process.env.PORT , ()=>{
+  console.log(`Server running on ${process.env.PORT}`)
 });
 
 export default app;
